@@ -118,12 +118,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  // Try putting func declarations outside the DOMContentLoaded?
-  // try the current function, otherwise try async function:
-  // const response = await fetch
-  // const data = await response.json()
-  // button.innerHtml = data.buttonText
-
   async function follow_button(event) {
     const button = event.target;
     const user = button.dataset.user;
@@ -194,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Display the correct number of buttons
+  // Display the correct number of page buttons
   function get_buttons(filter, user) {
     document.querySelector("#buttons-view").innerHTML = "";
     fetch(`/posts/${filter}?pages="request"&user=${user}`)
@@ -286,6 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
     event.target.className += " active";
   }
 
+  // Load a user's profile
   function load_profile(username) {
     document.querySelector("#compose-view").style.display = "none";
     document.querySelector("#profile-view").style.display = "block";
@@ -328,27 +323,11 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  // Change this so it doesn't load on other HTML templates? Or maybe
-  // it only loads once? If so, just need to add it to the home button on the nav
-  // Does it not run when reloading a different page, like profile page?
   var currentPage = 1;
   const csrftoken = getCookie("csrftoken");
   const currentUser = JSON.parse(
     document.getElementById("current_user").textContent
   );
-
-  /*
-  // Add active class to active nav links
-  const navBar = document.querySelector(".nav-pills");
-  const navLinks = navBar.getElementsByClassName("nav-link");
-
-  for (var i = 0; i < navLinks.length; i++) {
-    navLinks[i].addEventListener("click", (event) => {
-      var current = document.getElementsByClassName("nav-link active");
-      current[0].className = current[0].className.replace(" active", "");
-      event.target.className += " active";
-    });
-  } */
 
   // Creating an alert to display when a user isn't logged in
   const alert = (message, type) => {
@@ -371,7 +350,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // By default, submit post button is disabled
   document.querySelector("#submit").disabled = true;
 
-  // Enable button only if there is text in the input field
+  // Enable submit post button only if there is text in the input field
   document.querySelector(".compose-content").onkeyup = () => {
     if (document.querySelector(".compose-content").value.length > 0) {
       document.querySelector("#submit").disabled = false;
@@ -385,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     if (currentUser === "") {
       alert("Log in or create an account to post", "primary");
-      console.log("You are not logged in");
+      document.querySelector(".compose-content").value = "";
     } else {
       submit_post();
     }
@@ -394,14 +373,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const allPosts = document.querySelector("#all-posts");
   allPosts.className += " active";
-  /*allPosts.addEventListener("click", (event) => {
-    //event.preventDefault();
-    document.querySelector("#profile-view").style.display = "none";
-    document.querySelector("#compose-view").style.display = "block";
-
-    load_posts("all", 1);
-    get_buttons("all");
-  });*/
 
   if (currentUser != "") {
     document
